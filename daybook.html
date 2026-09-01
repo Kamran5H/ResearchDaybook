@@ -1,0 +1,354 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Research Daybook — Kamran Ashraf</title>
+<style>
+:root{
+  --bg:#0f1220; --panel:#171a2b; --panel2:#1e2236; --ink:#e8ebf5; --mut:#9aa3c0;
+  --line:#2b3050; --accent:#6c8cff; --teal:#25c2a0; --amber:#f0b429; --rose:#ff6b8a;
+  --today:#202542; --shadow:0 10px 30px rgba(0,0,0,.35);
+}
+*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(1200px 700px at 80% -10%,#1b2140 0,var(--bg) 55%);
+  color:var(--ink);font:15px/1.5 'Segoe UI',system-ui,Arial;min-height:100vh}
+.wrap{max-width:1040px;margin:0 auto;padding:22px 20px 60px}
+header{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap;margin-bottom:18px}
+.brand{font-weight:700;font-size:22px;letter-spacing:.3px}
+.brand b{background:linear-gradient(90deg,var(--accent),var(--teal));-webkit-background-clip:text;background-clip:text;color:transparent}
+.brand span{font-size:12px;font-weight:500;color:var(--teal);margin-left:8px;opacity:0.85}
+.date{color:var(--mut);font-size:13px;margin-top:2px}
+.motiv{margin:6px 0 0;font-style:italic;color:#c7cdf0;max-width:620px}
+.hbtns{display:flex;gap:8px;flex-wrap:wrap}
+button{font:inherit;cursor:pointer;border:0;border-radius:10px;padding:9px 13px;color:var(--ink);
+  background:var(--panel2);transition:.15s;border:1px solid var(--line)}
+button:hover{transform:translateY(-1px);border-color:var(--accent)}
+.primary{background:linear-gradient(90deg,var(--accent),#8a6cff);border:0}
+.ghost{background:transparent}
+h2.sec{font-size:13px;letter-spacing:2px;text-transform:uppercase;color:var(--mut);margin:26px 0 10px}
+/* TODAY */
+.today-wrap{background:linear-gradient(180deg,#232a4d,#1a1f38);border:1px solid #33407a;border-radius:18px;
+  padding:18px 18px 8px;box-shadow:var(--shadow)}
+.nextact{display:flex;align-items:center;gap:14px;background:linear-gradient(90deg,#243056,#1d3b4e);
+  border:1px solid #3c5a86;border-radius:14px;padding:14px 16px;margin-bottom:14px}
+.nextact .lab{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#7fd8c4}
+.nextact .act{font-size:18px;font-weight:800;margin-top:3px;line-height:1.3}
+.nextact .ctx{font-size:12px;color:var(--mut);margin-top:3px}
+.nextact button{white-space:nowrap}
+.today-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.today-head h1{font-size:20px;margin:0}
+.tcard{background:var(--today);border:1px solid var(--line);border-radius:14px;padding:16px 16px 12px;margin:12px 0}
+.tcard.big .tt{font-size:19px;font-weight:700}
+.chip{display:inline-block;font-size:11px;padding:3px 9px;border-radius:20px;background:#2a3160;color:#aab4ee;margin-left:8px;vertical-align:middle}
+.bar{height:7px;border-radius:6px;background:#2a2f52;overflow:hidden;margin:10px 0}
+.bar>i{display:block;height:100%;background:linear-gradient(90deg,var(--teal),var(--accent));width:0;transition:.3s}
+.step{display:flex;align-items:flex-start;gap:10px;padding:6px 0;border-top:1px dashed #262b49}
+.step:first-of-type{border-top:0}
+.step input{margin-top:3px;width:17px;height:17px;accent-color:var(--teal);cursor:pointer}
+.step .body{flex:1}
+.step .txt{display:block}
+.step .tip{font-size:12px;color:var(--mut);margin-top:3px;line-height:1.45;border-left:2px solid #313760;padding-left:8px}
+.step.done .txt{color:var(--mut);text-decoration:line-through}
+.rowbtns{display:flex;gap:8px;margin-top:10px}
+.rowbtns button{padding:6px 10px;font-size:13px}
+.addstep{display:flex;gap:8px;margin-top:8px}
+.addstep input{flex:1;background:#12162a;border:1px solid var(--line);color:var(--ink);border-radius:9px;padding:8px 10px}
+/* small panels */
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:720px){.cols{grid-template-columns:1fr}}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px}
+.mini{display:flex;align-items:center;gap:10px;padding:8px 6px;border-top:1px solid #232847;font-size:14px}
+.mini:first-of-type{border-top:0}
+.mini .g{flex:1}.mini small{color:var(--mut)}
+.mini.doneit .g{color:var(--mut);text-decoration:line-through}
+.pill{font-size:11px;color:var(--mut)}
+.small-btn{padding:5px 9px;font-size:12px}
+.empty{color:var(--mut);font-size:13px;padding:10px 4px}
+/* modal */
+.mask{position:fixed;inset:0;background:rgba(6,8,18,.72);display:none;align-items:center;justify-content:center;padding:18px;z-index:9}
+.mask.on{display:flex}
+.modal{background:var(--panel);border:1px solid #34407a;border-radius:16px;max-width:560px;width:100%;padding:20px;box-shadow:var(--shadow);max-height:88vh;overflow:auto}
+.modal h3{margin:0 0 4px}.modal p.sub{color:var(--mut);margin:0 0 14px;font-size:13px}
+.pick{display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-top:1px solid #232847}
+.pick input{margin-top:3px;width:17px;height:17px;accent-color:var(--accent)}
+textarea{width:100%;background:#12162a;border:1px solid var(--line);color:var(--ink);border-radius:10px;padding:10px;font:inherit;min-height:64px;margin-top:6px}
+.foot{display:flex;justify-content:flex-end;gap:8px;margin-top:16px}
+input.add{width:100%;background:#12162a;border:1px solid var(--line);color:var(--ink);border-radius:10px;padding:10px 12px;margin-top:8px}
+.k{color:var(--teal)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div>
+      <div class="brand">Research <b>Daybook</b> <span>• Kamran Ashraf (Kami)</span></div>
+      <div class="date" id="date"></div>
+      <p class="motiv" id="motiv"></p>
+    </div>
+    <div class="hbtns">
+      <button class="ghost small-btn" onclick="review()">Daily review</button>
+      <button class="ghost small-btn" onclick="exp()">Backup</button>
+      <button class="ghost small-btn" onclick="document.getElementById('imp').click()">Restore</button>
+      <input id="imp" type="file" accept="application/json" style="display:none" onchange="imp(this)">
+    </div>
+  </header>
+
+  <div class="today-wrap">
+    <div id="nextact" class="nextact"></div>
+    <div class="today-head"><h1>🎯 Today’s Focus</h1><button class="primary small-btn" onclick="review()">Plan today</button></div>
+    <div id="today"></div>
+  </div>
+
+  <div class="cols">
+    <div>
+      <h2 class="sec">⏳ Pending</h2>
+      <div class="panel" id="pending"></div>
+      <input class="add" id="newtask" placeholder="+ Add a task and press Enter" onkeydown="if(event.key==='Enter')addTask()">
+    </div>
+    <div>
+      <h2 class="sec">✅ Done</h2>
+      <div class="panel" id="done"></div>
+    </div>
+  </div>
+</div>
+
+<div class="mask" id="mask"><div class="modal" id="modal"></div></div>
+
+<script>
+const KEY='researchDaybook.v2';
+const MOTIV=[
+ "Small, consistent steps compound into a thesis.",
+ "One good experiment today beats three planned for tomorrow.",
+ "Focus on the next single action — not the whole mountain.",
+ "Data you collect today is the argument you make later.",
+ "Clarity comes from doing, not from waiting to feel ready.",
+ "Protect one deep-work block. Guard it like an instrument.",
+ "Write down what you learned before you leave the bench.",
+ "Progress over perfection — a finished run beats a perfect plan.",
+ "Every calibration you do now saves a week of doubt later.",
+ "Be the researcher who shows up daily. That is the edge.",
+ "Today’s careful note is tomorrow’s effortless paragraph.",
+ "Momentum is built, not found. Start with step one."
+];
+function todayStr(){const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
+function doy(){const d=new Date();return Math.floor((d-new Date(d.getFullYear(),0,0))/864e5);}
+function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,6);}
+
+const SEED=[
+ ["Setup, planning & sourcing","Setup",[
+   ["Confirm parent Ni–Co MOF or its 1,4-BDC linker in the lab","Fallback: no BDC → buy cheap terephthalic acid, or use an in-stock diacid (adipic/succinic) as precursor."],
+   ["Secure ~1–2 g Ce(NO₃)₃·6H₂O — the one must-get","No cerium in the inventory. Borrow from a neighbouring group or buy the smallest bottle. La/Y cannot substitute (redox-inert)."],
+   ["Line up mg benchmarks Pt/C + RuO₂, and Nafion","Only mg/µL needed — borrow from an electrochemistry lab; no big purchase."],
+   ["Book shared facilities early: XPS, XRD, SEM/TEM, BET","XPS is the bottleneck — reserve ONE session for all samples."],
+   ["Request HPC account/queue for the DFT part","Fallback: if HPC is slow, DFT can lean on published descriptor values later."],
+   ["Keep a lab notebook + back up this app weekly","Record every actual mass/temperature; use the Backup button."]
+ ]],
+ ["Parent MOF synthesis (master + control batches)","Synthesis",[
+   ["Choose Ni:Co ratio (start 1:1); weigh Ni + Co salts","Nitrates dissolve best. If salt is clumped/hydrated, dry it first."],
+   ["Dissolve metals + BDC linker in DMF (or DMF/EtOH/water)","Linker won’t dissolve? Warm gently, sonicate, add a few drops of formic acid as modulator."],
+   ["Solvothermal: seal vial/autoclave, 120–150 °C, 12–24 h","Worst case (no crystals): raise time/temp, add a little water, check the vial is sealed."],
+   ["Cool slowly; collect solid by centrifuge/filtration","Gel-like product? Centrifuge harder, wash with fresh DMF."],
+   ["Wash 3× (DMF, then ethanol/methanol)","Skipping washes leaves unreacted salt → false XRD peaks later."],
+   ["Dry at 60–80 °C (oven or vacuum)","Avoid >100 °C, which can collapse the framework."],
+   ["Confirm phase by XRD vs a reference pattern","If amorphous: re-synthesise with modulator and slower cooling."],
+   ["Also make Ni-only and Co-only MOFs (the two controls)","Same recipe, single metal — needed for the Ni-N-C and Co-N-C control samples."],
+   ["Check yield; if <0.5 g, run one more batch","Keep ONE master NiCo batch as the single source for all Ce samples."]
+ ]],
+ ["Nitrogen-doping + single pyrolysis run","Synthesis",[
+   ["Pick N-source + ratio (urea 1:5 MOF:urea by mass)","Urea is cheapest; HMTA retains more N; guanidine also fine — all in stock."],
+   ["Grind MOF + N-source ~10 min until homogeneous","Poor mixing → uneven N-doping and scattered results."],
+   ["Load boat; purge furnace with N₂/Ar 20–30 min before heating","Residual O₂ burns the carbon — verify flow and no leaks FIRST."],
+   ["Ramp 5 °C/min to 800–900 °C, hold 2 h, cool under inert","Too little/ashy → drop to 800 °C. Poor conductivity → raise to 900 °C."],
+   ["Run the two control MOFs through the SAME program","Fairness: controls must see identical pyrolysis."],
+   ["Mild acid wash (1 M HCl, 6–12 h) to remove MgO + loose metal","Skipping this leaves MgO peaks in XRD. Rinse to neutral pH."],
+   "Rinse to neutral, then dry",
+   ["Weigh carbon; split the NiCo batch into 5 equal portions","Label at once: 1 baseline (no Ce) + 4 for Ce 3/5/8/12 wt%."]
+ ]],
+ ["Cerium loading series (impregnation)","Synthesis",[
+   ["Calculate Ce salt mass for 3/5/8/12 wt% on each portion","wt% Ce = Ce-metal mass ÷ (carbon + Ce). Molar mass Ce 140.1, salt 434.2 g/mol."],
+   ["Dissolve Ce salt in minimum water/ethanol (~pore volume)","Incipient wetness: if volume > pore volume, add in aliquots and dry between."],
+   ["Impregnate each portion dropwise; rest/stir 2–4 h","If liquid beads on the carbon, add a drop of ethanol to wet it."],
+   "Dry at 80–100 °C",
+   ["Air anneal 300–400 °C, 2 h → forms CeO₂","Too hot/long sinters CeO₂ into big particles and loses vacancies. Keep ≤400 °C."],
+   ["Verify Ce content by EDX/ICP if available","If loading is off-target, record the ACTUAL value — the descriptor uses measured Ce, not nominal."]
+ ]],
+ ["Characterisation (batch all samples)","Characterisation",[
+   ["XRD every sample: Ni/Co, oxides, CeO₂ fluorite peaks","CeO₂ growing with loading = confirmation. No CeO₂ at low wt% = well dispersed (good sign)."],
+   ["Raman: I_D/I_G defect ratio","Same laser power/time for all; compare trends, not absolutes."],
+   ["BET: surface area + pore volume of every sample","KEY confounder check — host area must stay ~constant across the series."],
+   ["SEM/TEM: morphology + CeO₂ size/dispersion","Note if high loading coats or blocks the carbon."],
+   ["XPS: acquire ALL samples in one booked session","The make-or-break measurement — consistency needs a single session."],
+   ["XPS Ce 3d deconvolution (fixed constraints, Shirley bkgd)","u‴ near 916 eV = Ce⁴⁺ fingerprint; Ce³⁺ from v₀/v′ and u₀/u′ areas."],
+   ["XPS O 1s: oxygen-vacancy (defect O) fraction","Should rise with Ce³⁺ — supports the vacancy story."],
+   ["XPS N 1s: pyridinic/pyrrolic/graphitic/M-Nₓ fractions","Should stay similar across the series (confounder control)."]
+ ]],
+ ["Electrochemistry — RDE half-cell","Electrochem",[
+   ["Polish glassy-carbon RDE (alumina 0.3 → 0.05 µm), sonicate","A dirty tip = irreproducible curves. Polish before every sample."],
+   ["Make ink: catalyst + water/IPA + Nafion; sonicate","Won’t disperse? More IPA + longer sonication in an ice bath."],
+   ["Drop-cast fixed loading ~0.25–0.5 mg/cm²; dry evenly","Uneven film → noisy LSV. Cast in small stages."],
+   ["Cell: Hg/HgO reference, GRAPHITE counter, RDE working","Use graphite, NOT a Pt counter — trace Pt falsely boosts ORR."],
+   ["Calibrate Hg/HgO to RHE (H₂ on Pt), once per electrolyte","Write down the conversion number."],
+   ["ORR: O₂-saturate 0.1 M KOH 30 min; LSV at 1600 rpm; get E₁/₂","Also take an N₂-saturated background scan to subtract capacitance."],
+   ["Koutecký–Levich: LSV at 400–2025 rpm; compute n","n≈4 = good direct path. n≈2 = peroxide — recheck ink/loading."],
+   ["OER: 1.0 M KOH; LSV; overpotential at 10 mA/cm²","Measure solution resistance (EIS) and apply ~95% iR correction."],
+   ["Tafel slopes (ORR & OER) from the kinetic region","Fit only the linear low-overpotential region."],
+   "EIS: charge-transfer resistance at a fixed potential",
+   ["Stability: chronoamperometry + accelerated CV cycling","Fast drop? Check film adhesion / Nafion amount / re-cast."],
+   ["Benchmarks: Pt/C (ORR) + RuO₂ (OER) on the SAME rig/day","Only a few mg each. Validates the setup and gives a fair comparison."]
+ ]],
+ ["Bounded DFT (explains the why)","Theory",[
+   ["Set up Quantum ESPRESSO: PBE + PAW pseudopotentials","Fallback: if HPC time is short, cite published descriptor values — the thesis still stands."],
+   ["Build ONE minimal NiCo–N₄ site + adjacent CeO₂/vacancy slab","Reuse the same frozen model for all loadings — mirrors the single variable."],
+   ["Converge cutoffs (~50/400 Ry) and k-mesh on the baseline","Do convergence tests before production runs to avoid wasted queue time."],
+   ["DFT+U (Dudarev): U(Ce 4f)≈4.5, U(3d)≈3–4 eV; ±1 eV sweep","Report U-sensitivity openly — pre-empts the ‘U-tuning’ critique."],
+   "d-band centres of Ni and Co from PDOS",
+   "Oxygen-vacancy formation energy (with O₂ correction)",
+   ["Free energies of *OH/*O/*OOH (CHE) → theoretical overpotential","The largest ΔG step sets the limiting potential."],
+   "Bader charge transfer across the oxide–carbon interface"
+ ]],
+ ["Analysis + writing","Analysis",[
+   "Tabulate E₁/₂, η, ΔE, Tafel, n, R_ct for every sample",
+   ["Plot ΔE vs Ce³⁺/Ce⁴⁺ ratio — the volcano","This single plot IS the thesis. Mark the optimum loading clearly."],
+   ["Confounder check: also plot ΔE vs total Ce and vs BET area","Accept the descriptor only if the Ce³⁺/Ce⁴⁺ correlation is the tightest."],
+   ["Overlay DFT descriptors (d-band, vacancy energy) on the trend","Shows DFT explains WHY the optimum exists."],
+   ["If no volcano: report the true monotonic/flat trend","Still valid + publishable — hypothesis testing is the point, not a failure."],
+   "Draft figures, then chapters; update the supervisor"
+ ]]
+];
+
+let S=load();
+function load(){try{const r=JSON.parse(localStorage.getItem(KEY));if(r&&r.tasks)return r;}catch(e){}return null;}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){console.warn('Save failed (storage blocked or full). Use the Backup button to keep your data safe.');}}
+function fresh(){
+  const tasks=SEED.map((s,i)=>({id:uid(),title:s[0],stage:s[1],steps:s[2].map(x=>Array.isArray(x)?{t:x[0],tip:x[1],done:false}:{t:x,done:false}),status:i===0?'today':'pending'}));
+  S={tasks,lastDate:todayStr(),log:[]};save();
+}
+if(!S){fresh();}
+
+// day rollover
+let showReview=false;
+if(S.lastDate && S.lastDate!==todayStr()){
+  S.tasks.forEach(t=>{if(t.status==='today' && !allDone(t)) t.status='pending';});
+  S.lastDate=todayStr();save();showReview=true;
+}else if(!S.lastDate){S.lastDate=todayStr();save();}
+
+function allDone(t){return t.steps.length>0 && t.steps.every(s=>s.done);}
+function prog(t){if(!t.steps.length)return 0;return Math.round(100*t.steps.filter(s=>s.done).length/t.steps.length);}
+
+function render(){
+  document.getElementById('date').textContent=new Date().toLocaleDateString(undefined,{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+  document.getElementById('motiv').textContent='“'+MOTIV[doy()%MOTIV.length]+'”';
+  // next single action
+  const nx=document.getElementById('nextact');let na=null;
+  for(const t of S.tasks.filter(x=>x.status==='today')){const s=t.steps.find(x=>!x.done);if(s){na={t,s};break;}}
+  if(na){
+    nx.innerHTML=`<div style="flex:1"><div class="lab">▶ Start here — your next single action</div><div class="act">${esc(na.s.t)}</div><div class="ctx">in “${esc(na.t.title)}”</div></div><button class="primary" id="nadone">✓ Done</button>`;
+    document.getElementById('nadone').onclick=()=>{na.s.done=true;if(allDone(na.t)){na.t.status='done';na.t.finished=todayStr();}save();render();};
+  }else{
+    const anyToday=S.tasks.some(t=>t.status==='today');
+    nx.innerHTML=`<div style="flex:1"><div class="lab">▶ Next action</div><div class="act">${anyToday?'All of today’s steps are checked — great work! 🎉':'No focus set yet — pick today’s task to see your first step.'}</div></div>`+(anyToday?'':`<button class="primary" onclick="review()">Plan today</button>`);
+  }
+  // today
+  const tw=document.getElementById('today');tw.innerHTML='';
+  const td=S.tasks.filter(t=>t.status==='today');
+  if(!td.length){tw.innerHTML='<div class="empty">No focus set for today. Click “Plan today” to choose what matters most.</div>';}
+  td.forEach(t=>tw.appendChild(bigCard(t)));
+  // pending
+  const pe=document.getElementById('pending');pe.innerHTML='';
+  const pd=S.tasks.filter(t=>t.status==='pending');
+  if(!pd.length)pe.innerHTML='<div class="empty">Nothing pending. 🎉</div>';
+  pd.forEach(t=>pe.appendChild(miniRow(t,'pending')));
+  // done
+  const de=document.getElementById('done');de.innerHTML='';
+  const dn=S.tasks.filter(t=>t.status==='done');
+  if(!dn.length)de.innerHTML='<div class="empty">Finished tasks will appear here.</div>';
+  dn.slice().reverse().forEach(t=>de.appendChild(miniRow(t,'done')));
+}
+
+function bigCard(t){
+  const d=document.createElement('div');d.className='tcard big';
+  d.innerHTML=`<div class="tt">${esc(t.title)}<span class="chip">${esc(t.stage||'')}</span></div>
+    <div class="bar"><i style="width:${prog(t)}%"></i></div>`;
+  t.steps.forEach((s,i)=>{
+    const r=document.createElement('div');r.className='step'+(s.done?' done':'');
+    r.innerHTML=`<input type="checkbox" ${s.done?'checked':''}><div class="body"><span class="txt">${esc(s.t)}</span>${s.tip?`<div class="tip">↳ ${esc(s.tip)}</div>`:''}</div>`;
+    r.querySelector('input').onchange=()=>{s.done=!s.done;if(allDone(t)){t.status='done';t.finished=todayStr();}save();render();};
+    d.appendChild(r);
+  });
+  const as=document.createElement('div');as.className='addstep';
+  as.innerHTML=`<input placeholder="+ add a step"><button class="small-btn">Add</button>`;
+  as.querySelector('button').onclick=()=>{const v=as.querySelector('input').value.trim();if(v){t.steps.push({t:v,done:false});save();render();}};
+  as.querySelector('input').onkeydown=e=>{if(e.key==='Enter')as.querySelector('button').click();};
+  d.appendChild(as);
+  const rb=document.createElement('div');rb.className='rowbtns';
+  rb.innerHTML=`<button class="small-btn" data-a="done">✔ Mark done</button><button class="small-btn" data-a="pend">↓ To pending</button>`;
+  rb.querySelector('[data-a=done]').onclick=()=>{t.status='done';t.finished=todayStr();t.steps.forEach(s=>s.done=true);save();render();};
+  rb.querySelector('[data-a=pend]').onclick=()=>{t.status='pending';save();render();};
+  d.appendChild(rb);
+  return d;
+}
+function miniRow(t,kind){
+  const r=document.createElement('div');r.className='mini'+(kind==='done'?' doneit':'');
+  const meta=kind==='done'?(t.finished||''):`${prog(t)}%`;
+  r.innerHTML=`<span class="g">${esc(t.title)} <span class="pill">${esc(t.stage||'')}</span></span><small>${meta}</small>`;
+  const b=document.createElement('button');b.className='small-btn';
+  if(kind==='pending'){b.textContent='→ Today';b.onclick=()=>{t.status='today';save();render();};}
+  else{b.textContent='↺ Reopen';b.onclick=()=>{t.status='pending';if(t.steps.length)t.steps.forEach(s=>s.done=false);save();render();};}
+  r.appendChild(b);return r;
+}
+function addTask(){
+  const el=document.getElementById('newtask');const v=el.value.trim();if(!v)return;
+  S.tasks.push({id:uid(),title:v,stage:'Custom',steps:[],status:'pending'});el.value='';save();render();
+}
+// daily review modal
+function review(){
+  const m=document.getElementById('modal');
+  const pend=S.tasks.filter(t=>t.status!=='done');
+  let rows=pend.map(t=>`<label class="pick"><input type="checkbox" ${t.status==='today'?'checked':''} data-id="${t.id}"><span>${esc(t.title)} <span class="pill">${esc(t.stage||'')} · ${prog(t)}%</span></span></label>`).join('')||'<div class="empty">All tasks are done. Add a new one below.</div>';
+  m.innerHTML=`<h3>Plan today 🎯</h3><p class="sub">Unfinished work from yesterday is carried over. Tick what you’ll focus on today — keep it short so today stays clear.</p>
+    ${rows}
+    <p class="sub" style="margin-top:14px">What did you get done yesterday/today? (optional note)</p>
+    <textarea id="note" placeholder="e.g. Finished MOF synthesis, started pyrolysis…"></textarea>
+    <div class="foot"><button class="ghost" onclick="closeM()">Cancel</button><button class="primary" onclick="applyReview()">Start my day</button></div>`;
+  document.getElementById('mask').classList.add('on');
+}
+function applyReview(){
+  const ids=[...document.querySelectorAll('#modal .pick input')];
+  ids.forEach(cb=>{const t=S.tasks.find(x=>x.id===cb.dataset.id);if(!t)return;
+    if(cb.checked)t.status='today';else if(t.status==='today')t.status='pending';});
+  const note=document.getElementById('note').value.trim();
+  if(note){S.log=S.log||[];S.log.push({d:todayStr(),note});}
+  save();closeM();render();
+}
+function closeM(){document.getElementById('mask').classList.remove('on');}
+document.getElementById('mask').onclick=e=>{if(e.target.id==='mask')closeM();};
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeM();});
+// backup
+function exp(){const b=new Blob([JSON.stringify(S,null,2)],{type:'application/json'});const url=URL.createObjectURL(b);const a=document.createElement('a');
+  a.href=url;a.download='research-daybook-backup-'+todayStr()+'.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);}
+function validBackup(o){
+  if(!o||typeof o!=='object'||!Array.isArray(o.tasks))return false;
+  return o.tasks.every(t=>t&&typeof t==='object'&&typeof t.title==='string'&&Array.isArray(t.steps));
+}
+function imp(inp){const f=inp.files[0];if(!f){return;}
+  const r=new FileReader();
+  r.onload=()=>{
+    let o;try{o=JSON.parse(r.result);}catch(e){alert('Invalid backup file — not valid JSON.');inp.value='';return;}
+    if(!validBackup(o)){alert('Invalid backup file — missing or malformed task data.');inp.value='';return;}
+    if(!confirm('Restore will REPLACE all current tasks and progress with the backup. Continue?')){inp.value='';return;}
+    // normalise so older/partial backups can't wedge render()
+    o.tasks.forEach(t=>{t.steps=t.steps.map(s=>({t:String(s.t||''),tip:s.tip,done:!!s.done}));t.status=t.status||'pending';});
+    o.lastDate=o.lastDate||todayStr();o.log=Array.isArray(o.log)?o.log:[];
+    S=o;save();render();alert('Restored.');inp.value='';
+  };
+  r.onerror=()=>{alert('Could not read the file.');inp.value='';};
+  r.readAsText(f);
+}
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+
+render();
+if(showReview)review();
+</script>
+</body>
+</html>
