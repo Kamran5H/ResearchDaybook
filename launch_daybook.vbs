@@ -8,11 +8,13 @@ appDir = fso.GetParentFolderName(WScript.ScriptFullName)
 targetHtml = appDir & "\daybook.html"
 
 If Not fso.FileExists(targetHtml) Then
+    Dim userProf
+    userProf = WshShell.ExpandEnvironmentStrings("%USERPROFILE%")
     candidates = Array( _
-        "C:\Users\chkam\OneDrive\Desktop\02_Projects & Development\Research Daybook\daybook.html", _
-        "C:\Users\chkam\OneDrive\Desktop\Research Daybook\daybook.html", _
-        "C:\Users\chkam\OneDrive\Desktop\BrandFinder\ResearchDaybook\daybook.html", _
-        "C:\Users\chkam\Desktop\02_Projects & Development\Research Daybook\daybook.html" _
+        userProf & "\OneDrive\Desktop\02_Projects & Development\Research Daybook\daybook.html", _
+        userProf & "\OneDrive\Desktop\Research Daybook\daybook.html", _
+        userProf & "\OneDrive\Desktop\BrandFinder\ResearchDaybook\daybook.html", _
+        userProf & "\Desktop\02_Projects & Development\Research Daybook\daybook.html" _
     )
     For Each cand In candidates
         If fso.FileExists(cand) Then

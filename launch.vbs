@@ -52,11 +52,13 @@ g.Close
 On Error Goto 0
 
 targetHtml = base & "\daybook.html"
+Dim userProf
+userProf = sh.ExpandEnvironmentStrings("%USERPROFILE%")
 If Not fso.FileExists(targetHtml) Then
-  targetHtml = "C:\Users\chkam\OneDrive\Desktop\BrandFinder\ResearchDaybook\daybook.html"
+  targetHtml = userProf & "\OneDrive\Desktop\BrandFinder\ResearchDaybook\daybook.html"
 End If
 If Not fso.FileExists(targetHtml) Then
-  targetHtml = "C:\Users\chkam\OneDrive\Desktop\Research Daybook\daybook.html"
+  targetHtml = userProf & "\OneDrive\Desktop\Research Daybook\daybook.html"
 End If
 
 If testMode Then
